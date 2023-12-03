@@ -56,25 +56,65 @@ void luRu(){
     Contact_Person *p = head;                                                               // 声明指针,用于从链表头开始遍历
     Contact_Person *prev = NULL;                                                            // 声明指针,用于记录遍历过程中的前一个节点
     Contact_Person *newNode = (Contact_Person *) malloc(sizeof(Contact_Person));       // 在内存中分配一块空间放置新节点
-
+    // 录入
     while (1) {
         printf("***学生成绩录入***\n");
-        printf("请输入学生学号：");
-        scanf("%lld", &newNode->stuNum);
-        printf("请输入学生姓名：");
+        // 先输入学号，再进行检测，如果合法则传入链表，不合法则要求重新输入
+        while (1) {
+            long long inputNum;
+            printf("请输入学生学号（11位）：");
+            scanf("%lld", &inputNum);
+            if (inputNum >= 10000000000 && inputNum <= 99999999999) {
+                printf("学号合法！已录入。\n");
+                newNode->stuNum = inputNum;
+                break;
+            } else {
+                printf("非法学号！学号必须为11位数,请重新输入。\n");
+                continue;
+            }
+        }                                                // 录入学生学号
+        printf("请输入学生姓名：");                                // 录入学生姓名
         scanf("%99s", newNode->name);
-        printf("请输入学生性别：");
-        scanf("%99s", newNode->sex);
+        // 先传入链表，再进行检测。
+        while (1) {
+            printf("请输入学生性别：");
+            scanf("%99s", newNode->sex);
+            if (strcmp(newNode->sex, "男") == 0 || strcmp(newNode->sex, "女") == 0) {  // 对比判断链表中的值进行检测
+                printf("性别规则合法！（规则1）已录入。\n");
+                break;
+            } else {
+                if (strcmp(newNode->sex, "其他") == 0) {
+                    printf("请输入其他性别：");
+                    scanf("%99s", newNode->sex);
+                    printf("性别规则合法！（规则2）已录入。\n");
+                    break;
+                } else {
+                    printf("无效性别！请重新输入。\n");
+                    continue;                                                         // 规则都不满足则要求重新输入
+                }
+            }
+        }                                                // 录入学生性别
         printf("请输入学生院系：");
         scanf("%99s", newNode->academic);
         printf("请输入学生专业：");
         scanf("%99s", newNode->major);
         printf("请输入学生籍贯：");
         scanf("%99s", newNode->province);
-        printf("请输入学生家庭住址：");               // Clion的BUG会导致运行框内自动换行
+        printf("请输入学生家庭住址：");                            // Clion的BUG会导致运行框内自动换行
         scanf("%99s", newNode->address);
-        printf("请输入学生电话号码：");
-        scanf("%lld", &newNode->phoneNum );
+        while (1) {
+            long long inputNum;
+            printf("请输入学生电话号码（仅支持手机号）：");
+            scanf("%lld", &inputNum);
+            if (inputNum >= 10000000000 && inputNum <= 19999999999){  // 必须1为开头的11位手机号
+                newNode -> phoneNum = inputNum;
+                printf("号码字数合法！已录入\n");
+                break;
+            } else {
+                printf("非法号码！请检查字数，请重新输入。\n");
+                continue;
+            }
+        }                                               // 录入手机号码
         printf("请输入学生邮箱：");
         scanf("%99s", newNode->emailNum);
 
@@ -528,9 +568,9 @@ int main(){
         switch (choice) {
             case 1:
             luRu_Start:
-                luRu();                                               // 继续录入跳转（落点）
-                // 询问是否继续输入
+                luRu();                                               // 继续录入跳转（落点）编号：1
 
+                // 询问是否继续输入
                 while (1) {
                     char TFChoice[10];
                     clearInputBuffer();                               // 清空输入缓冲区
@@ -542,7 +582,7 @@ int main(){
                     } else {
                         if (strcmp(TFChoice, "T") == 0) {
                             printf("继续录入\n");
-                            goto luRu_Start;                          // 继续录入跳转（起点）
+                            goto luRu_Start;                          // 继续录入跳转（起点）编号：1
                         } else {
                             printf("无效选择，重新选择\n");
                             continue;
