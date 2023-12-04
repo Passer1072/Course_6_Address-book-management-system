@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <windows.h>
 #include <malloc.h>
+//#include <pcre.h>
 
 // 全局变量
 int choice;
@@ -79,7 +80,7 @@ void luRu(){
         while (1) {
             printf("请输入学生性别：");
             scanf("%99s", newNode->sex);
-            if (strcmp(newNode->sex, "男") == 0 || strcmp(newNode->sex, "女") == 0) {  // 对比判断链表中的值进行检测
+            if (strcmp(newNode->sex, "男") == 0 || strcmp(newNode->sex, "女") == 0) {  // 对比判断链表中的值进行检测;讲解：strcmp与strstr的区别
                 printf("性别规则合法！（规则1）已录入。\n");
                 break;
             } else {
@@ -115,9 +116,22 @@ void luRu(){
                 continue;
             }
         }                                               // 录入手机号码
-        printf("请输入学生邮箱：");
-        scanf("%99s", newNode->emailNum);
+        while (1) {
+            char inputEmail[100];
+            printf("请输入学生邮箱：");
+            scanf("%99s", inputEmail);
 
+            // 检测邮箱格式是否合法
+            if (strstr(inputEmail,"@gmail.com") != NULL){
+                printf("格式正确（gmail邮箱），已录入。\n");
+//                newNode->emailNum = inputEmail;        // 错误
+                strcpy(newNode->emailNum, inputEmail);   // 对于字符数组，不能通过简单的赋值来进行复制，应该使用字符串操作函数如 strcpy。
+                break;
+            } else {
+                printf("格式错误!可能是未受支持的邮箱格式，请重新输入\n");
+                continue;
+            }
+        }                                               // 录入邮箱
         newNode->pNext = NULL;
         printf("数据录入完成\n");
         system("pause");
