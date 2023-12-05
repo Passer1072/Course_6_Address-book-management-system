@@ -131,6 +131,7 @@ void luRu(){
                 printf("格式正确（QQ邮箱），已录入。\n");
                 strcpy(newNode->emailNum, inputEmail);
                 break;
+
             } else {
                 printf("格式错误!可能是未受支持的邮箱格式，请重新输入\n");
                 continue;
