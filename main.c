@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <stdbool.h>
 #include <windows.h>
 #include <malloc.h>
@@ -127,8 +128,16 @@ void luRu(){
 //                newNode->emailNum = inputEmail;        // 错误
                 strcpy(newNode->emailNum, inputEmail);   // 对于字符数组，不能通过简单的赋值来进行复制，应该使用字符串操作函数如 strcpy。
                 break;
-            } if ((strstr(inputEmail,"@qq.com") != NULL)) {
+            } if (strstr(inputEmail,"@qq.com") != NULL) {
                 printf("格式正确（QQ邮箱），已录入。\n");
+                strcpy(newNode->emailNum, inputEmail);
+                break;
+            } if(strstr(inputEmail,"@163.com") != NULL){
+                printf("格式正确（网易邮箱），已录入。\n");
+                strcpy(newNode->emailNum, inputEmail);
+                break;
+            } if(strstr(inputEmail,"@outlook.com") != NULL){
+                printf("格式正确（Outlook邮箱），已录入。\n");
                 strcpy(newNode->emailNum, inputEmail);
                 break;
             } else {
@@ -136,6 +145,7 @@ void luRu(){
                 continue;
             }
         }                                               // 录入邮箱
+
         newNode->pNext = NULL;
         printf("数据录入完成\n");
         system("pause");
@@ -285,7 +295,7 @@ void chaZhao(){
 
 
 
-}               // 查找目标
+}                                     // 查找目标
 void testAll(){
     printf("简单查询（仅显示基本信息）\n");
     Contact_Person *p = head;
@@ -295,7 +305,7 @@ void testAll(){
         p = p->pNext;
     }
     return;
-}               // 测试
+}                                     // 测试
 void deleteMessage(){
 
     long long stuNumber;
@@ -347,7 +357,7 @@ void deleteMessage(){
         // 如果没有找到学生,打印提示信息
         printf("学号 %lld的学生未找到。\n", stuNumber);
     }
-}         // 删除数据
+}                               // 删除数据
 void xiuGai() {
     int chooseNum;
     long long stuNum;
@@ -574,6 +584,27 @@ void xiuGai() {
         }
     }
 }
+void checkEmailDelay(const char *email) {
+    // 构建ping命令
+    char command[100];
+    sprintf(command, "ping -n 3 %s", email);
+
+    // 执行命令并获取输出
+    FILE *fp = popen(command, "r");
+    if (fp == NULL) {
+        perror("popen");
+        exit(EXIT_FAILURE);
+    }
+
+    // 读取输出并显示
+    char buffer[256];
+    while (fgets(buffer, sizeof(buffer), fp) != NULL) {
+        printf("%s", buffer);
+    }
+
+    // 关闭文件流
+    pclose(fp);
+}           // 获取ping值
 
 
 
@@ -607,6 +638,12 @@ int main(){
                         }
                     }
                 }
+
+                // 测试ping值
+                printf("开始测试与邮箱网站的连通性\n");
+                const char *email = "qq.com";
+                checkEmailDelay(email);
+                printf("\n");
 
                 testAll();
                 clearInputBuffer();
