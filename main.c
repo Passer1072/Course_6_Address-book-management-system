@@ -8,6 +8,7 @@
 // 全局变量
 int choice;
 int Ch;
+char emailWeb[100];
 
 // 结构体
 typedef struct contactPerson{
@@ -72,6 +73,7 @@ void luRu(){
                 break;
             } else {
                 printf("非法学号！学号必须为11位数,请重新输入。\n");
+                clearInputBuffer();
                 continue;
             }
         }                                                // 录入学生学号
@@ -125,6 +127,7 @@ void luRu(){
             // 检测邮箱格式是否合法
             if (strstr(inputEmail,"@gmail.com") != NULL){
                 printf("格式正确（gmail邮箱），已录入。\n");
+
 //                newNode->emailNum = inputEmail;        // 错误
                 strcpy(newNode->emailNum, inputEmail);   // 对于字符数组，不能通过简单的赋值来进行复制，应该使用字符串操作函数如 strcpy。
                 break;
@@ -164,7 +167,7 @@ void luRu(){
         newNode->pNext = p;                             // 新节点指向当前节点,即'p'
         return;
     }
-}                  // 录入成绩
+}                                        // 录入成绩
 void chaZhao(){
     int chooseNum;                  // 用户选择的编号
     char choice_name[100];          // 通过名字查找
@@ -583,11 +586,12 @@ void xiuGai() {
             printf("已取消操作\n");
         }
     }
-}
+}                                     // 数据修改
 void checkEmailDelay(const char *email) {
     // 构建ping命令
+    printf("开始测试邮箱延迟...\n");
     char command[100];
-    sprintf(command, "ping -n 3 %s", email);
+    sprintf(command, "ping -n 1 %s", email);
 
     // 执行命令并获取输出
     FILE *fp = popen(command, "r");
@@ -599,13 +603,15 @@ void checkEmailDelay(const char *email) {
     // 读取输出并显示
     char buffer[256];
     while (fgets(buffer, sizeof(buffer), fp) != NULL) {
-        printf("%s", buffer);
+        // 查找包含 "time=" 的行，表示延迟信息
+        if (strstr(buffer, "时间=") != NULL) {
+            printf("%s", buffer);
+        }
     }
 
     // 关闭文件流
     pclose(fp);
-}           // 获取ping值
-
+}           // 获取邮箱网站ping值
 
 
 // main
@@ -641,6 +647,7 @@ int main(){
 
                 // 测试ping值
                 printf("开始测试与邮箱网站的连通性\n");
+
                 const char *email = "qq.com";
                 checkEmailDelay(email);
                 printf("\n");
