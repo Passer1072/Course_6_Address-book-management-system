@@ -37,11 +37,23 @@ bool isValidStudentNumber(long long num) {
     return true;  // 所有位都是数字
 }       // 学号输入限制（仅数字）
 
+// 定义函数
+int isStuNumExists(Contact_Person* head, long long stuNum) {
+    Contact_Person* current = head;
+    while (current != NULL) {
+        if (current->stuNum == stuNum) {
+            return 1; // 学号已存在
+        }
+        current = current->pNext;
+    }
+    return 0; // 学号不存在
+}    // 用于检测学号是否重复
+
 // void
 void clearInputBuffer() {
     int c;
     while ((c = getchar()) != '\n' && c != EOF);
-}     // 清空输入缓冲区
+}                           // 清空输入缓冲区
 void optionsList(){
     printf("   菜  单\n");               // 标题
     printf("1.学生信息录入\n");           // 数据录入
@@ -53,7 +65,7 @@ void optionsList(){
     printf("0.退出\n");                 // 退出
     printf("请输入序号:");
     scanf("%d", &choice);              // 存储输入的选项序号
-}           // 选项列表
+}                                 // 选项列表
 void luRu(){
 
     Contact_Person *p = head;                                                               // 声明指针,用于从链表头开始遍历
@@ -67,7 +79,15 @@ void luRu(){
             long long inputNum;
             printf("请输入学生学号（11位）：");
             scanf("%lld", &inputNum);
+            // 第一检测：检测学号是否满足11位要求
             if (inputNum >= 10000000000 && inputNum <= 99999999999) {
+                // 第二检测：检测学号是否重复
+                printf("开始检测学号是否重复...\n");
+                if (isStuNumExists(head, inputNum)) {
+                    printf("学号已存在，请重新输入。\n");
+                    continue;
+                }
+                printf("学号未重复！\n");
                 printf("学号合法！已录入。\n");
                 newNode->stuNum = inputNum;
                 break;
