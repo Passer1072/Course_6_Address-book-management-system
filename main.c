@@ -646,13 +646,22 @@ void checkEmailDelay(const char *email) {
     pclose(fp);
 }           // 获取邮箱网站ping值
 void saveData() {
-    FILE *file = fopen("data.txt", "w");//以写入模式打开文件
+    FILE *file = fopen("data.txt", "a");//以写入模式打开文件
     if (file == NULL) {
         printf("打开文件失败\n");
         return;
     }
+
+    // 获取文件当前位置
+    long pos = ftell(file);
+
     printf("数据保存中...");
-    fprintf(file, "学号\t\t\t姓名\t性别\t院系\t专业\t籍贯\t家庭住址\t电话号码\t\t邮箱\n");     // 答应数据标题
+
+    // 如果文件为空，写入数据标题
+    if (pos == 0) {
+        fprintf(file, "学号\t\t\t姓名\t性别\t院系\t专业\t籍贯\t家庭住址\t电话号码\t\t邮箱\n");
+    }
+    
     Contact_Person *p = head;
     while (p != NULL) {
         fprintf(file, "%lld  %s  %s  %s  %s  %s  %s  %lld  %s\n", p->stuNum,p->name ,p->sex, p->academic, p->major, p->province,
