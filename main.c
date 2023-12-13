@@ -61,6 +61,8 @@ void optionsList(){
     printf("4.显示所有数据（仅基本信息）\n");// 显示所有数据
     printf("5.学生数据修改\n");           // 查询数据
     printf("6.数据保存\n");              // 数据保存
+    printf("7.数据读取\n");
+    printf("8.测试ping\n");               // test Ping
     printf("0.退出\n");                 // 退出
     printf("请输入序号:");
     scanf("%d", &choice);              // 存储输入的选项序号
@@ -178,7 +180,7 @@ void luRu(){
 
         newNode->pNext = NULL;
         printf("数据录入完成\n");
-        system("pause");
+//        system("pause");
 
         if (!head || newNode->stuNum < head->stuNum) {
             newNode->pNext = head;                        // 如果链表为空或新学生的学号小于头节点的学号,则新节点指向当前的头节点
@@ -643,7 +645,25 @@ void checkEmailDelay(const char *email) {
     // 关闭文件流
     pclose(fp);
 }           // 获取邮箱网站ping值
+void saveData() {
+    FILE *file = fopen("data.txt", "w");//以写入模式打开文件
+    if (file == NULL) {
+        printf("打开文件失败\n");
+        return;
+    }
+    printf("数据保存中...");
+    fprintf(file, "学号\t\t\t姓名\t性别\t院系\t专业\t籍贯\t家庭住址\t电话号码\t\t邮箱\n");     // 答应数据标题
+    Contact_Person *p = head;
+    while (p != NULL) {
+        fprintf(file, "%lld  %s  %s  %s  %s  %s  %s  %lld  %s\n", p->stuNum,p->name ,p->sex, p->academic, p->major, p->province,
+                p->address, p->phoneNum, p->emailNum);
+        p = p->pNext;
 
+    }
+    fclose(file);
+    printf("数据已保存到文件：“data.txt\n");
+    system("pause");
+}                                   //保存数据（链表）
 
 // main
 int main(){
@@ -705,6 +725,10 @@ int main(){
                 break;
 
             case 6:
+                saveData();
+                break;
+
+            case 7:
                 // 测试ping值
                 email= "qq.com";
                 checkEmailDelay(email);
