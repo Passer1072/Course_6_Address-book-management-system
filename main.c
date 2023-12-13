@@ -3,7 +3,6 @@
 #include <stdbool.h>
 #include <windows.h>
 #include <malloc.h>
-//#include <pcre.h>
 
 // 全局变量
 int choice;
@@ -112,6 +111,7 @@ void luRu(){
                     scanf("%99s", newNode->sex);
                     printf("性别规则合法！（规则2）已录入。\n");
                     break;
+                    // 规则1：限“男”“女”。 规则2：任意性别
                 } else {
                     printf("无效性别！请重新输入。\n");
                     continue;                                                         // 规则都不满足则要求重新输入
@@ -147,7 +147,6 @@ void luRu(){
             // 检测邮箱格式是否合法
             if (strstr(inputEmail,"@gmail.com") != NULL){
                 printf("格式正确（gmail邮箱），已录入。\n");
-
 //                newNode->emailNum = inputEmail;        // 错误
                 strcpy(newNode->emailNum, inputEmail);   // 对于字符数组，不能通过简单的赋值来进行复制，应该使用字符串操作函数如 strcpy。
                 break;
@@ -161,6 +160,14 @@ void luRu(){
                 break;
             } if(strstr(inputEmail,"@outlook.com") != NULL){
                 printf("格式正确（Outlook邮箱），已录入。\n");
+                strcpy(newNode->emailNum, inputEmail);
+                break;
+            } if(strstr(inputEmail,"@yahoo.com") != NULL){
+                printf("格式正确（雅虎邮箱1），已录入。\n");
+                strcpy(newNode->emailNum, inputEmail);
+                break;
+            } if(strstr(inputEmail,"@myyahoo.com") != NULL){
+                printf("格式正确（雅虎邮箱2），已录入。\n");
                 strcpy(newNode->emailNum, inputEmail);
                 break;
             } else {
@@ -594,6 +601,7 @@ void xiuGai() {
 
             }
             // 每次修改完显示修改后的完整数据
+            printf("修改后信息:\n");
             printf("*************************************************\n");
             printf("学号：%lld           姓名：%s        性别：%s\n",temp->stuNum,temp->name,temp->sex);
             printf("院系：%s          专业：%s\n",temp->academic,temp->major);
@@ -603,6 +611,9 @@ void xiuGai() {
             printf("*************************************************\n");
             system("pause");
         } else {
+            if(choose == "N" || choose == "n"){
+
+            }
             printf("已取消操作\n");
         }
     }
@@ -636,6 +647,7 @@ void checkEmailDelay(const char *email) {
 
 // main
 int main(){
+    int c;
     // do循环
     do {
         optionsList();                                // 选项列表
@@ -693,6 +705,14 @@ int main(){
                 break;
 
             case 6:
+                // 测试ping值
+                email= "qq.com";
+                checkEmailDelay(email);
+                printf("QQ延迟\n");
+
+                email= "baidu.com";
+                checkEmailDelay(email);
+                printf("百度延迟\n");
 
                 break;
         }
